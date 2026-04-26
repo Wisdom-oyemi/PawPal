@@ -2,31 +2,27 @@
 
 This is **PawPal+**, a Streamlit app that helps a pet owner plan care tasks for their pet.
 
-## Scenario
+## Summary
 
-A busy pet owner needs help staying consistent with pet care. They want an assistant that can:
+If you're a busy pet owner that needs help staying consistent with caring for your pet, we have the solution for you! The PawPal+ assistant can:
 
 - Track pet care tasks (walks, feeding, meds, enrichment, grooming, etc.)
 - Consider constraints (time available, priority, owner preferences)
 - Produce a daily plan and explain why it chose that plan
-
-## Functionality
-
-The final app allows the following:
-
-- Lets a user enter basic owner + pet info
-- Lets a user add/edit tasks (duration + priority at minimum)
-- Generates a daily schedule/plan based on constraints and priorities
-- Displays the plan clearly (and ideally explain the reasoning)
+It also comes with increased internal reliability checks to ensure the quality of the program!
 
 
-## Demo
+### Architecture Overview
+The user inputs data into the system, such as pet info and constraints. This data is funneled into the scheduler engine, which is the backbone of the system's operation; the engine subsequently produces a plan output that mirrors the preferences of the user, with added reasoning based on the data points. The newly-added quality and reliability layer "stress-tests" the robustness of the plan to ensure the engine is behaving in the ideal manner, combining an automated test suite with a separate evaluator and regression gate that rejects bad plans. Ultimately, the plan is then suggested for user approval, which can then influence subsequent task edits.
+
+
+## Sample Interactions
 <a href="/course_images/ai110/demo_screenshot.png" target="_blank"><img src='/course_images/ai110/demo_screenshot.png' title='PawPal App' width='' alt='PawPal App' class='center-block' /></a>.
 
 
-## Getting Started
+## Set-Up
 
-### Setup
+### Instructions
 
 ```bash
 python -m venv .venv
@@ -35,25 +31,8 @@ pip install -r requirements.txt
 ```
 
 
-## Features
+### Design Decisions:
 
-PawPal+ currently includes the following scheduling and planning features:
-
-- Priority-first scheduling using deterministic multi-key sorting:
-	- Sort order is: priority (ascending, where 1 is highest), then preferred start time (`HH:MM`), then shorter duration, then task name.
-- Due-date and status gating before scheduling:
-	- Only tasks that are `pending` and due today (or overdue) are considered for the daily plan.
-- Time-budget aware planning:
-	- Tasks are added greedily while remaining owner time is available (`available_time_per_day`).
-- Constraint-based schedule optimization:
-	- Optional filtering supports `include/exclude` categories, max priority, status filters, and pet-specific filters.
-- Conflict detection with slot indexing:
-	- Tasks with explicit start times are tracked by `(due_date, start_time)` to detect collisions quickly and emit warnings.
-- Recurring task lifecycle support:
-	- Completing a daily/weekly task auto-generates the next pending instance with the correct next due date.
-	- Duplicate recurring instances are prevented.
-- Human-readable schedule reasoning:
-	- Each scheduled task includes an explanation string, and warning messages are collected for skipped/conflicting tasks.
 
 ## Testing PawPal+
 
@@ -70,4 +49,7 @@ The tests in the PawPal+ test suite cover the following behaviors:
 - Task daily reoccurrence
 - Time conflicts for tasks
 
-Confidence level: 4.5 stars
+### Testing Summary
+
+
+## Reflection
