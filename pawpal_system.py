@@ -426,3 +426,113 @@ class Scheduler:
             task.get_estimated_duration(),
             task.name.lower(),
         )
+
+
+@dataclass
+class ScheduleEvaluation:
+    """Structured reliability report for a generated schedule."""
+
+    score: float
+    checks: dict[str, bool] = field(default_factory=dict)
+    issues: list[str] = field(default_factory=list)
+    warnings: list[str] = field(default_factory=list)
+
+    @property
+    def passed(self) -> bool:
+        """Return whether the schedule passed reliability checks."""
+        return self.score >= 80.0 and not self.issues and not self.warnings and all(self.checks.values())
+
+    def summary(self) -> str:
+        """Return a short human-readable summary for UI or CLI output."""
+        status = "PASSED" if self.passed else "REVIEW NEEDED"
+        lines = [f"Reliability score: {self.score:.0f}/100 ({status})"]
+
+        for check_name, check_passed in self.checks.items():
+            check_label = check_name.replace("_", " ").capitalize()
+            lines.append(f"- {check_label}: {'OK' if check_passed else 'Needs attention'}")
+
+        if self.issues:
+            lines.append("Issues:")
+            for issue in self.issues:
+                lines.append(f"- {issue}")
+
+        if self.warnings:
+            lines.append("Warnings:")
+            for warning in self.warnings:
+                lines.append(f"- {warning}")
+
+        return "\n".join(lines)
+
+
+class ScheduleEvaluator:
+    """Evaluate how reliable a generated schedule is."""
+
+    def __init__(self, owner: Owner, passing_score: float = 80.0):
+        self.owner = owner
+        self.passing_score = float(passing_score)
+
+    def evaluate(self, schedule: list[dict], warnings: list[str] | None = None) -> ScheduleEvaluation:
+        """Return a reliability report for the provided schedule."""
+        warnings = list(warnings or [])
+        issues: list[str] = []
+        checks: dict[str, bool] = {}
+
+        total_minutes = sum(float(item.get("duration", 0)) for item in schedule)
+        available_minutes = float(self.owner.available_time_per_day)
+        checks["within_time_budget"] = total_minutes <= available_minutes
+        if not checks["within_time_budget"]:
+            issues.append(
+                f"Scheduled time ({total_minutes:.0f} min) exceeds the available budget ({available_minutes:.0f} min)."
+            )
+
+        checks["has_reasoning"] = all(bool(item.get("reason")) for item in schedule)
+        if schedule and not checks["has_reasoning"]:
+            issues.append("Some scheduled items are missing explanation text.")
+
+        checks["sorted_by_scheduler_rules"] = schedule == sorted(
+            schedule,
+            key=self._schedule_sort_key,
+        )
+        if schedule and not checks["sorted_by_scheduler_rules"]:
+            issues.append("Schedule order does not match the scheduler rules.")
+
+        checks["no_warnings"] = not warnings
+        if warnings:
+            issues.extend(f"Scheduler warning: {warning}" for warning in warnings)
+
+        eligible_tasks = [
+            task
+            for task in self.owner.tasks
+            if task.status.lower() == "pending" and task.due_date <= date.today()
+        ]
+        checks["eligible_tasks_accounted_for"] = bool(schedule) or not eligible_tasks
+        if eligible_tasks and not schedule:
+            issues.append("Eligible tasks were available, but no schedule entries were produced.")
+
+        score = 100.0
+        if not checks["within_time_budget"]:
+            score -= 25.0
+        if not checks["has_reasoning"]:
+            score -= 15.0
+        if not checks["sorted_by_scheduler_rules"]:
+            score -= 15.0
+        if warnings:
+            score -= min(20.0, 5.0 * len(warnings))
+        if eligible_tasks and not schedule:
+            score -= 20.0
+
+        return ScheduleEvaluation(
+            score=max(0.0, score),
+            checks=checks,
+            issues=issues,
+            warnings=warnings,
+        )
+
+    @staticmethod
+    def _schedule_sort_key(item: dict) -> tuple:
+        return (
+            int(item.get("priority", 99)),
+            float(item.get("start_minute", 0.0)),
+            float(item.get("duration", 0.0)),
+            str(item.get("task", "")).lower(),
+        )

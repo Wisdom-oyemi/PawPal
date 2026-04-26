@@ -1,5 +1,5 @@
 import streamlit as st
-from pawpal_system import Owner, Pet, Scheduler, Task
+from pawpal_system import Owner, Pet, ScheduleEvaluator, Scheduler, Task
 
 st.set_page_config(page_title="PawPal+", page_icon="🐾", layout="centered")
 
@@ -199,6 +199,7 @@ if st.button("Generate schedule"):
 
     schedule = owner.scheduler.optimize_schedule(constraints)
     warnings = owner.scheduler.get_warnings()
+    reliability_report = ScheduleEvaluator(owner).evaluate(schedule, warnings)
 
     if schedule:
         st.success("Schedule generated and sorted by scheduler priority/time rules.")
@@ -214,6 +215,24 @@ if st.button("Generate schedule"):
         st.markdown("### Conflict and validation warnings")
         for warning in warnings:
             st.warning(warning)
+
+    st.markdown("### Reliability Check")
+    st.metric("Reliability score", f"{reliability_report.score:.0f}/100")
+    if reliability_report.passed:
+        st.success("Schedule passed reliability checks.")
+    else:
+        st.warning("Schedule needs review before use.")
+
+    st.table(
+        [
+            {"check": check_name.replace("_", " ").title(), "passed": check_passed}
+            for check_name, check_passed in reliability_report.checks.items()
+        ]
+    )
+
+    if reliability_report.issues:
+        for issue in reliability_report.issues:
+            st.error(issue)
 
     st.markdown("### Why this plan?")
     st.text(owner.scheduler.explain_reasoning())

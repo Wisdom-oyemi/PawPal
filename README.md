@@ -9,7 +9,7 @@ If you're a busy pet owner that needs help staying consistent with caring for yo
 - Track pet care tasks (walks, feeding, meds, enrichment, grooming, etc.)
 - Consider constraints (time available, priority, owner preferences)
 - Produce a daily plan and explain why it chose that plan
-It also comes with increased internal reliability checks to ensure the quality of the program!
+It also comes with increased internal reliability checks to ensure the quality of the system!
 
 
 ### Architecture Overview
@@ -31,7 +31,8 @@ pip install -r requirements.txt
 ```
 
 
-### Design Decisions:
+### Design Decisions
+This system was designed to both generate and evaluate schedules based on data given by the user. I intentionally made the call to strengthen the evaluation suite (as opposed to introducing more generative AI-powered features) because the very spine of the system itself is generative. Therefore, ensuring the plans created are correct will increase the system's efficiency.
 
 
 ## Testing PawPal+
@@ -48,8 +49,11 @@ The tests in the PawPal+ test suite cover the following behaviors:
 - Chronological order of display
 - Task daily reoccurrence
 - Time conflicts for tasks
+- Reliability scoring for clean schedules
+- Reliability warnings for conflicting schedules
 
 ### Testing Summary
+PawPal+ now includes a separate reliability layer on top of the scheduler. The app and CLI both show a reliability score, rule checks, and warnings so the user can review the plan before acting on it.
 
 
 ## Reflection

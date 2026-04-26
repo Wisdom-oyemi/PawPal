@@ -8,28 +8,13 @@ PawPal+
 
 ## 2. Intended Use  
 
-Describe what your recommender is designed to do and who it is for. 
-
-Prompts:  
-
-- What kind of recommendations does it generate  
-- What assumptions does it make about the user  
-- Is this for real users or classroom exploration  
+This system is intended for users who want a clean and structured schedule for taking care of their pets.
 
 ---
 
 ## 3. How the Model Works  
 
-Explain your scoring approach in simple language.  
-
-Prompts:  
-
-- What features of each song are used (genre, energy, mood, etc.)  
-- What user preferences are considered  
-- How does the model turn those into a score  
-- What changes did you make from the starter logic  
-
-Avoid code here. Pretend you are explaining the idea to a friend who does not program.
+The PawPal+ system takes in pet data and preferences from the user, builds a schedule with tasks to perform based on the input data, validates that the schedule is in accordance with a stipulated set of rules, and displays it for human review.
 
 ---
 
@@ -37,12 +22,7 @@ Avoid code here. Pretend you are explaining the idea to a friend who does not pr
 
 Describe the dataset the model uses.  
 
-Prompts:  
-
-- How many songs are in the catalog  
-- What genres or moods are represented  
-- Did you add or remove data  
-- Are there parts of musical taste missing in the dataset  
+The PawPal+ system relies on user data such as the owner's profile, the pets under said profile, any created tasks, and specific constraints/preferences. 
 
 ---
 
