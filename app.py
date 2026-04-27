@@ -11,7 +11,7 @@ Welcome to the PawPal+ app!
 """
 )
 
-with st.expander("Scenario", expanded=True):
+with st.expander("Summary", expanded=True):
     st.markdown(
         """
 **PawPal+** is a pet care planning assistant. It helps a pet owner plan care tasks

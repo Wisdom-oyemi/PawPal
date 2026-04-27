@@ -40,51 +40,26 @@ Prompts:
 
 ## 6. Limitations and Bias 
 
-Where the system struggles or behaves unfairly. 
-
-Prompts:  
-
-- Features it does not consider  
-- Genres or moods that are underrepresented  
-- Cases where the system overfits to one preference  
-- Ways the scoring might unintentionally favor some users  
+The PawPal+ system may struggle with a non-trivial amount of tasks to be added or multiple schedules per one user (think a convoluted and meticulous pet owner being overprotective).
+In addition, the system is biased towards the most popular pet types (cats and dogs), and would only handle the kinds of behaviors most associated with those pet types (e.g. walks or litter cleaning).
 
 ---
 
 ## 7. Evaluation  
 
-How you checked whether the recommender behaved as expected. 
-
-Prompts:  
-
-- Which user profiles you tested  
-- What you looked for in the recommendations  
-- What surprised you  
-- Any simple tests or comparisons you ran  
-
-No need for numeric metrics unless you created some.
+Within the codebase there is a dedicated test suite to ensure the system works as intended, along with a newly-dedicated quality and reliability layer built specifically to ensure the consistency of the system's outputs with the given scheduler format.
 
 ---
 
 ## 8. Future Work  
 
-Ideas for how you would improve the model next.  
+Some potential upgrades to the PawPal+ system may include:
 
-Prompts:  
-
-- Additional features or preferences  
 - Better ways to explain recommendations  
-- Improving diversity among the top results  
-- Handling more complex user tastes  
+- Increased task handling/implementation for larger sizes 
+- Cleaner/upgraded UI for more seamless performance on multiple devices 
 
 ---
 
-## 9. Personal Reflection  
-
-A few sentences about your experience.  
-
-Prompts:  
-
-- What you learned about recommender systems  
-- Something unexpected or interesting you discovered  
-- How this changed the way you think about music recommendation apps  
+## 9. Personal Reflection/AI Collaboration 
+  
