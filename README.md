@@ -22,6 +22,7 @@ The user inputs data into the system, such as pet info and constraints. This dat
 <a href="/course_images/ai110/3rd_screenshot.png" target="_blank"><img src='/course_images/ai110/3rd_screenshot.png' title='PawPal App' width='' alt='PawPal App' class='center-block' /></a>.
 
 ## Video Walkthrough
+https://github.com/user-attachments/assets/2df7edba-40f8-4915-bdea-bef726ea2b8b
 
 
 ## Set-Up

@@ -28,13 +28,7 @@ The PawPal+ system relies on user data such as the owner's profile, the pets und
 
 ## 5. Strengths  
 
-Where does your system seem to work well  
-
-Prompts:  
-
-- User types for which it gives reasonable results  
-- Any patterns you think your scoring captures correctly  
-- Cases where the recommendations matched your intuition  
+The system works best with a limited, straightforward dataset of 2-3 pets and a small variety of tasks. It is also good at verifying whether the created schedule follows the conventions that the internal program stipulates.
 
 ---
 
@@ -62,4 +56,5 @@ Some potential upgrades to the PawPal+ system may include:
 ---
 
 ## 9. Personal Reflection/AI Collaboration 
+I collaborated with GitHub Copilot on this project, and it helped me in multiple ways: make sense of the codebase at hand, evaluate what path to take towards implementing the added reliability layer, and test the strength of the schedules provided. Copilot made the correct observation of the implemented reliability system being strong enough to fulfill requirements I outlined (based on the assignment's guidelines); however, it made a flawed multi-implementation of the Mermaid diagram I requested in a slide-architecture format, which I had to override and specifically request in Mermaid format. 
   
